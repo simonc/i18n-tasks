@@ -46,8 +46,8 @@ module I18n
         end
 
         # missing translations (present in base locale, but untranslated in another locale )
-        (I18n.available_locales.map(&:to_s) - [base_locale]).each do |locale|
-          trn = get_locale_data(locale)[locale]
+        (I18n.available_locales - [base_locale]).each do |locale|
+          trn = get_locale_data
           traverse base[base_locale] do |key, base_value|
             translated = t(trn, key)
             if translated.blank?
@@ -62,7 +62,7 @@ module I18n
       end
 
       def p_locale(locale)
-        ' ' + bold(locale.ljust(5))
+        ' ' + bold(locale.to_s.ljust(5))
       end
 
       def p_key(key)

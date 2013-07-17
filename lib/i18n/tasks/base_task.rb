@@ -9,9 +9,11 @@ module I18n
       include TaskHelpers
 
       # locale data hash, with locale name as root
-      def get_locale_data(locale)
-        # todo multiple files, configuration option
-        (@locale_data ||= {})[locale] ||= YAML.load_file("config/locales/#{locale}.yml")
+      def get_locale_data
+        @locale_data ||= begin
+          I18n.backend.send(:load_translations)
+          I18n.backend.send(:translations)
+        end
       end
 
       # main locale file path (for writing to)
@@ -82,11 +84,11 @@ module I18n
       end
 
       def base_locale
-        I18n.default_locale.to_s
+        I18n.default_locale
       end
 
       def base
-        @base ||= get_locale_data(base_locale)
+        @base ||= get_locale_data
       end
     end
   end
